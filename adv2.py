@@ -155,7 +155,7 @@ while len(rooms_to_visit) > 0:
             elif current_room in room_connections.values():
                 direction = next(key for key, value in room_connections.items() if value == current_room)
             else:
-                pass
+                print(room_connections)
 
         # Travel Back to last path
         if direction is not None:         

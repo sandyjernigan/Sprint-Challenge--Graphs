@@ -13,9 +13,9 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -28,8 +28,6 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 traversal_path = []
-rooms_to_visit = []
-rooms_to_visit.append(player.current_room.id)
 
 # Rooms Completed
 rooms_completed = []
@@ -43,12 +41,29 @@ path_taken = []
 last_room_direction = None
 comment = ""
 
+# Setup Queue
+to_visit = Queue()
+
+# Get first queue
+current_room = player.current_room.id
+room_connections = traversal_graph.get(current_room)
+direction = next(key for key, value in room_connections.items() if value == "?")
+to_visit.enqueue([current_room, direction])
+print([current_room, direction])
+
+
+
+rooms_to_visit = []
+rooms_to_visit.append([player.current_room.id, direction])
+
 i = 1
 
 # while the plan_to_visit queue is not Empty:
-while len(rooms_to_visit) > 0:
+while to_visit.size > 0:
+# while len(rooms_to_visit) > 0:
 # while i < 25:
 #     i += 1
+    current_room = plan_to_visit.dequeue() <--- No way to dequeue by id... 
 
     full_path.append(player.current_room.id)
     path_taken.append(player.current_room.id)
