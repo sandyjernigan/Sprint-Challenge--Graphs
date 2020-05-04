@@ -126,17 +126,25 @@ while len(rooms_to_visit) > 0:
         if len(path_taken) > 0: 
             last_path = path_taken.pop(-1)
 
-            # while current_room == last_path:
-            #     last_path = path_taken.pop(-1)
-                
+            if current_room == last_path:
+                if len(path_taken) > 0: 
+                    last_path = path_taken.pop(-1)
+                else: 
+                    last_path = None
+        else:
+            last_path = None
 
+        if last_path is not None:
             if last_path in room_connections.values(): 
                 direction = next(key for key, value in room_connections.items() if value == last_path)
             elif current_room in room_connections.values():
                 direction = next(key for key, value in room_connections.items() if value == current_room)
             else:
+                print(last_path)
+                print(path_taken)
                 print("break")
-                break
+                direction = None
+                # break
 
         else: 
             # Check rooms to visit
@@ -146,52 +154,54 @@ while len(rooms_to_visit) > 0:
                 direction = next(key for key, value in room_connections.items() if value == last_path)
             elif current_room in room_connections.values():
                 direction = next(key for key, value in room_connections.items() if value == current_room)
-            
+            else:
+                pass
 
-
-            # Travel Back to last path            
+        # Travel Back to last path
+        if direction is not None:         
             traversal_path.append(direction)
             player.travel(direction)
             last_room_direction = direction
 
-            print (f"Current: {current_room}, Last: {last_path}, Connections: {room_connections}, Direction: {direction}")
+        print (f"Current: {current_room}, Last: {last_path}, Connections: {room_connections}, Direction: {direction}")
 
     comment += f"- Last Move: {last_room_direction} "
     print(comment)
+    print (f"Rooms to Visit: {rooms_to_visit}")
 
 # print (f"Path: {traversal_path}")
 # print (traversal_graph)
 # print (f"Path Taken: {path_taken}")
-# print (f"Rooms to Visit: {rooms_to_visit}")
+print (f"Rooms to Visit: {rooms_to_visit}")
 # print (f"Rooms Completed: {rooms_completed}")
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
-visited_rooms = set()
-player.current_room = world.starting_room
-visited_rooms.add(player.current_room)
+# visited_rooms = set()
+# player.current_room = world.starting_room
+# visited_rooms.add(player.current_room)
 
-for move in traversal_path:
-    player.travel(move)
-    visited_rooms.add(player.current_room)
+# for move in traversal_path:
+#     player.travel(move)
+#     visited_rooms.add(player.current_room)
 
-if len(visited_rooms) == len(room_graph):
-    print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
-else:
-    print("TESTS FAILED: INCOMPLETE TRAVERSAL")
-    print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
+# if len(visited_rooms) == len(room_graph):
+#     print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
+# else:
+#     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
+#     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
 
 
 
-#######
-# UNCOMMENT TO WALK AROUND
-#######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# #######
+# # UNCOMMENT TO WALK AROUND
+# #######
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
