@@ -14,8 +14,8 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+# map_file = "maps/test_loop_fork.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -37,7 +37,9 @@ room_connections = {}
 # Setup Visited List
 rooms_to_visit = []
 rooms_visited = []
-paths_taken = []
+path_taken = []
+last_room_direction = None
+comment = ""
 
 # Get first room
 current_room = player.current_room.id
@@ -51,13 +53,6 @@ for direction, room in room_connections.items():
 # Add first connection to graph
 traversal_graph.update({player.current_room.id: room_connections})
 
-# List for Rooms Completed
-# rooms_completed = []
-# full_path = []
-path_taken = []
-last_room_direction = None
-comment = ""
-
 def reverseDirection(direction):
     if direction == "n": return "s"
     if direction == "s": return "n"
@@ -67,8 +62,7 @@ def reverseDirection(direction):
 # while the rooms_to_visit list is not Empty:
 while len(rooms_to_visit) > 0:
     current_room = player.current_room.id
-    
-    print (f"Current Room: {current_room} ")
+
     comment = f"Comment - Current Room: {current_room} "
 
     # Check Connected Rooms in Graph
@@ -78,11 +72,10 @@ while len(rooms_to_visit) > 0:
     if last_room_direction is not None and last_room is not None:
         new_direction = reverseDirection(last_room_direction)
         room_connections[new_direction] = last_room
-        print(f"Add Last Room {last_room}: {room_connections}")
 
     # Count how many ?
     unknown_connections = list(room_connections.values()).count("?")
-    comment += f"- Connections: {room_connections} - Unknown Connections: {unknown_connections}"
+    # comment += f"- Connections: {room_connections} - Unknown Connections: {unknown_connections}"
     
     if unknown_connections > 0:
         # Get direction
@@ -91,8 +84,8 @@ while len(rooms_to_visit) > 0:
         # Remove Current Room and direction from que
         if [current_room, direction] in rooms_to_visit:
             rooms_to_visit.remove([current_room, direction])
-        comment += f"- Remove Path: {[current_room, direction]} "
-        comment += f"- Rooms to Visit: {rooms_to_visit} "
+        # comment += f"- Remove Path: {[current_room, direction]} "
+        # comment += f"- Rooms to Visit: {rooms_to_visit} "
 
         # Move Player new direction
         player.travel(direction)
@@ -122,11 +115,10 @@ while len(rooms_to_visit) > 0:
 
     # If 0 connections, then room completed. Check path for incomplete
     else:
-        comment += f"- Room Complete: {last_room}"
+        # comment += f"- Room Complete: {last_room}"
         # Go to last room
         if len(path_taken) > 0: 
             last_path = path_taken.pop(-1)
-            print (f"Last Path {last_path}")
             direction = reverseDirection(last_path[1])
             # Move Player new direction
             player.travel(direction)
@@ -156,7 +148,7 @@ while len(rooms_to_visit) > 0:
 
     comment += f"- Last Move: {last_room_direction} "
     print(comment)
-    print (f"Rooms to Visit: {rooms_to_visit}")
+    # print (f"Rooms to Visit: {rooms_to_visit}")
     
 print (f"Graph: {traversal_graph}")
 print (f"Path: {traversal_path}")
