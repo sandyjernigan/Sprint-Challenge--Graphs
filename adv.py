@@ -120,65 +120,45 @@ while len(rooms_to_visit) > 0:
             # Add connections to graph
             traversal_graph.update({player.current_room.id: room_connections})
 
-        # TODO: remove print
-        print (f"Graph: {traversal_graph}")
-
-
     # If 0 connections, then room completed. Check path for incomplete
     else:
         comment += f"- Room Complete: {last_room}"
         # Go to last room
-        last_path = path_taken.pop(-1)
-        print (f"Last Path {last_path}")
-        direction = last_path[1]
-        # Move Player new direction
-        player.travel(direction)
-        # Add Path to Traversal Path
-        traversal_path.append(direction)
-        # Set last room direction
-        last_room_direction = direction
-        # Set Last Room, to previous current room
-        last_room = current_room
-        # Update Connection
-        current_room = player.current_room.id
-        # room_connections[direction] = current_room
+        if len(path_taken) > 0: 
+            last_path = path_taken.pop(-1)
+            print (f"Last Path {last_path}")
+            direction = reverseDirection(last_path[1])
+            # Move Player new direction
+            player.travel(direction)
+            # Add Path to Traversal Path
+            traversal_path.append(direction)
+            # Set last room direction
+            last_room_direction = direction
+            # Set Last Room, to previous current room
+            last_room = current_room
+            # Update Connection
+            current_room = player.current_room.id
+            # room_connections[direction] = current_room
 
-    # else:
-    #     # If Room listed as completed, go back
-    #     # if last_room in rooms_to_visit:
-    #     #     rooms_to_visit.remove(last_room)
-    #     #     comment += f"- Remove: {last_room}"
-        
-    #     # If room complete remove from need to visit
-    #     # for room in rooms_completed:
-    #     #     if room in rooms_to_visit:
-    #     #         rooms_to_visit.remove(room)
+            if last_path in rooms_to_visit:
+                rooms_to_visit.remove([last_path[0], direction])
+        else:
+            # If still have items in rooms_to_visit, check if room has any ?
+            last_path = rooms_to_visit.pop(-1)
+            check_room = last_path[0]
+            # Check Connected Rooms in Graph
+            room_connections = traversal_graph.get(current_room)
+            # Check for unknown
+            unknown_connections = list(room_connections.values()).count("?")
 
-    #     # Go to last room
-    #     # comment += f"- Last Room {last_room}"
-    #     print(f"Last Room {last_room}")
-    #     print (traversal_graph)
-    #     print (f"Rooms to Visit: {rooms_to_visit}")
-        
-    #     # last_room_direction = next(key for key, value in room_connections.items() if value == last_room)
-    #     # comment += f"- Goto Last Room: {last_room_direction}"
-    #     # # update last room
-    #     # last_room = player.current_room.id
-    #     # # move to last room
-    #     # traversal_path.append(last_room_direction)
-    #     # player.travel(last_room_direction)
-    #     # lr = path_taken.pop(-1)
-    
-    print (f"Graph: {traversal_graph}")
+            # if unknown_connections > 0:
+                # Get Logic to go to this path
+
     comment += f"- Last Move: {last_room_direction} "
     print(comment)
-
-# print (f"Path: {traversal_path}")
-# print (traversal_graph)
-# print (f"Path Taken: {path_taken}")
-# print (f"Rooms to Visit: {rooms_to_visit}")
-# print (f"Rooms Completed: {rooms_completed}")
-
+    print (f"Rooms to Visit: {rooms_to_visit}")
+    print (f"Graph: {traversal_graph}")
+    print (f"Path: {traversal_path}")
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
