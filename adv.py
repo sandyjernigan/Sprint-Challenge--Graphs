@@ -11,8 +11,8 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -157,8 +157,9 @@ while len(rooms_to_visit) > 0:
     comment += f"- Last Move: {last_room_direction} "
     print(comment)
     print (f"Rooms to Visit: {rooms_to_visit}")
-    print (f"Graph: {traversal_graph}")
-    print (f"Path: {traversal_path}")
+    
+print (f"Graph: {traversal_graph}")
+print (f"Path: {traversal_path}")
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
