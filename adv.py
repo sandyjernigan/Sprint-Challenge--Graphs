@@ -63,7 +63,7 @@ def reverseDirection(direction):
 while len(rooms_to_visit) > 0:
     current_room = player.current_room.id
 
-    comment = f"Comment - Current Room: {current_room} "
+    comment = f"Current Room: {current_room} "
 
     # Check Connected Rooms in Graph
     room_connections = traversal_graph.get(current_room)
@@ -139,18 +139,19 @@ while len(rooms_to_visit) > 0:
             last_path = rooms_to_visit.pop(-1)
             check_room = last_path[0]
             # Check Connected Rooms in Graph
-            room_connections = traversal_graph.get(current_room)
+            room_connections = traversal_graph.get(check_room)
             # Check for unknown
             unknown_connections = list(room_connections.values()).count("?")
 
-            # if unknown_connections > 0:
+            if unknown_connections > 0:
                 # Get Logic to go to this path
+                print (f"Check Room: {check_room}")
 
-    comment += f"- Last Move: {last_room_direction} "
-    print(comment)
+    # comment += f"- Last Move: {last_room_direction} "
+    # print(comment)
     # print (f"Rooms to Visit: {rooms_to_visit}")
     
-print (f"Graph: {traversal_graph}")
+# print (f"Graph: {traversal_graph}")
 print (f"Path: {traversal_path}")
 
 # TRAVERSAL TEST - DO NOT MODIFY
